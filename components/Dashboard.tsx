@@ -295,7 +295,7 @@ const DashboardDetailRow = ({
       const go = async () => {
         const date = await provider
           .getBlock(lastHeartbeat.toNumber())
-          .then((block) => {
+          .then((block: any) => {
             return new Date(block.timestamp * 1000);
           });
         setTimeStamp(date);
@@ -357,8 +357,9 @@ const DashboardDetailRow = ({
 };
 
 const Name = ({ data }: { data?: any }) => {
-  const {name} = data;
-  if (!name)
+
+  if (data && data.name) {
+    const {name} = data;
     return (
       <Td>
         <Skeleton w="100%" height="20px" />
