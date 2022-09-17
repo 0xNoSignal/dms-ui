@@ -190,7 +190,7 @@
 
 "@bundlr-network/client@^0.8.6":
   version "0.8.6"
-  resolved "https://registry.npmjs.org/@bundlr-network/client/-/client-0.8.6.tgz"
+  resolved "https://registry.yarnpkg.com/@bundlr-network/client/-/client-0.8.6.tgz#c3ab95a0c9940084d0bf3269bf5b226ceb638f2f"
   integrity sha512-IPQtkVWsyNfdJCYedhEj4Gao9HDj3KCD0bIiadJ8qAO6uFSRVSiXMQIH4UDfjNaZUeID1giIxn6ZXkFUQdvrLA==
   dependencies:
     "@solana/wallet-adapter-base" "^0.9.2"
@@ -2428,6 +2428,11 @@ available-typed-arrays@^1.0.5:
   version "1.0.5"
   resolved "https://registry.npmjs.org/available-typed-arrays/-/available-typed-arrays-1.0.5.tgz"
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
+
+avsc@^5.7.5:
+  version "5.7.5"
+  resolved "https://registry.yarnpkg.com/avsc/-/avsc-5.7.5.tgz#da1840506b3ff69e14b5f87ce511e9c384405166"
+  integrity sha512-vkyt1+sj6qaD9oMtqqLE2pZ2IcHI66kFx8lpnVuXp55SnNPjKghfOhVfZpaDwDPpY0oVWP3Qu1uHZWxF3E856A==
 
 "avsc@https://github.com/Bundlr-Network/avsc#csp-fixes":
   version "5.4.7"
