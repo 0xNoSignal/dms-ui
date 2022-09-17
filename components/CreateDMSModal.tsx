@@ -336,8 +336,10 @@ const  notEnoughFunds = useMemo(() => {
       /**
        * @TODO: This is a hack to get the bundlr instance to work
        */
+      // @ts-ignore
       await window?.ethereum?.enable();
 
+      // @ts-ignore
       const provider = new providers.Web3Provider(window?.ethereum);
       await provider._ready();
 

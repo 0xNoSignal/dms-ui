@@ -321,7 +321,7 @@ const DashboardDetailRow = ({
   return (
     <Tr>
       <Td isNumeric>{id}</Td>
-      <Name name={data?.name} />
+      <Name data={data} />
       <Td
         display={{
           base: "none",
@@ -356,7 +356,8 @@ const DashboardDetailRow = ({
   );
 };
 
-const Name = ({ name }: { name: string }) => {
+const Name = ({ data }: { data?: any }) => {
+  const {name} = data;
   if (!name)
     return (
       <Td>
