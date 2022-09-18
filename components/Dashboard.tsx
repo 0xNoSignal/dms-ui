@@ -357,15 +357,15 @@ const DashboardDetailRow = ({
 };
 
 const Name = ({ data }: { data?: any }) => {
-
-  if (data && data.name) {
+  if (!data) {
     const {name} = data;
     return (
       <Td>
         <Skeleton w="100%" height="20px" />
       </Td>
     );
-  return <Td overflowX={"hidden"}>{name}</Td>;
+  }
+  return <Td overflowX={"hidden"}>{data?.name}</Td>;
 };
 
 const ActionArea = ({ isYou, isDead, switchId, encryptData }: any) => {
