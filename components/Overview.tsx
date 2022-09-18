@@ -19,7 +19,7 @@ export function Overview() {
   });
 
   const heartbeat = useMemo(() => {
-    return interval * AVG_BLOCKS_PER_DAY * 7;
+    return Math.floor(interval * AVG_BLOCKS_PER_DAY * 7);
   }, [interval]);
 
   const {
