@@ -93,7 +93,6 @@ export function secondsToDhms(seconds: number) {
 
 export  const dataURItoBlob = (dataURI: any) => {
 
-  console.log(dataURI);
 
   
   var byteString = window.atob(dataURI.split(',')[1]);
