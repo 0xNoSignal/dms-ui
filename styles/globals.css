@@ -18,6 +18,10 @@ a {
   z-index: 1000;
 }
 
+#lcm-modal-overlay{
+  z-index: 2000;
+}
+
 * {
   box-sizing: border-box;
 }
