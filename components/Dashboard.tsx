@@ -31,7 +31,7 @@ import {
   usePrepareContractWrite,
   useProvider,
 } from "wagmi";
-import { dataURItoBlob, secondsToDhms } from "../helpers";
+import { countdown, dataURItoBlob, secondsToDhms } from "../helpers";
 import ABI from "../helpers/ABI";
 import {
   ASSUMED_BLOCK_TIME,
@@ -344,6 +344,7 @@ const DashboardDetailRow = ({
         cadence={cadence}
         blockNumber={blockNumber}
         isDead={isDead}
+        id={id}
       />
       <Td
         display={{
@@ -492,6 +493,7 @@ interface IAssumedDeadIn {
   cadence: BigNumber;
   blockNumber?: number;
   isDead?: boolean;
+  id: number;
 }
 
 const AssumedDeadIn = ({
@@ -499,6 +501,7 @@ const AssumedDeadIn = ({
   cadence,
   blockNumber,
   isDead,
+  id
 }: IAssumedDeadIn) => {
   const timeLeft = useMemo(() => {
     const wenDead = lastHeartbeat.add(cadence).toNumber();
@@ -508,12 +511,23 @@ const AssumedDeadIn = ({
     return timeLeft;
   }, [cadence, lastHeartbeat, blockNumber]);
 
-  const [secondsLeft, setSecondsLeft] = useState<number>(timeLeft);
+
+  const [secondsLeft, setSecondsLeft] = useState<number>(0);
 
   useEffect(() => {
-    secondsLeft > 0 &&
-      setTimeout(() => setSecondsLeft((prev) => prev - 1), 1000);
-  }, [secondsLeft]);
+    if (timeLeft){
+      setSecondsLeft(timeLeft);
+    }
+  },[timeLeft])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSecondsLeft((secondsLeft) => secondsLeft - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  },[timeLeft])
+
+
   if (!blockNumber)
     return (
       <Td>
