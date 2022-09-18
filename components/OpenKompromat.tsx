@@ -1,4 +1,5 @@
 import { Button } from "@chakra-ui/react";
+// @ts-ignore
 import LitJsSdk from "lit-js-sdk";
 import React, { useCallback, useMemo } from "react";
 import { dataURItoBlob } from "../helpers";
