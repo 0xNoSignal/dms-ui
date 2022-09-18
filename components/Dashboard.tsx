@@ -105,7 +105,6 @@ export default function Dashboard({ address }: { address?: string }) {
     "0px 2px 10px rgba(255,255,255, 0.3)"
   );
 
-  console.log(boxShadow)
   return (
     <Box
       boxShadow={boxShadow}
@@ -269,13 +268,13 @@ const DashboardDetailRow = ({
 
   useEffect(() => {
     const run = async () => {
+      console.log("GO fileUrl", fileUrl);
       const downloadUrl = "https://arweave.net/" + fileUrl;
       try {
         const data = await fetch(downloadUrl);
-
-        const encryptedData = JSON.parse(await data.text());
-        if (encryptedData.name) {
-          setData(encryptedData);
+        const json = await data.json();
+        if (json.name) {
+          setData(json);
         }
       } catch (err) {}
     };
