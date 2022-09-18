@@ -109,12 +109,12 @@ export default function Dashboard({ address }: { address?: string }) {
   return (
     <Box
       boxShadow={boxShadow}
-      overflow={"hidden"}
+      overflowY={"scroll"}
       borderRadius={"25px 25px 0 0"}
       zIndex={12}
       bg={bg}
       mt={10}
-      pt={{
+      py={{
         base: 6,
         md: 14,
       }}
@@ -122,11 +122,15 @@ export default function Dashboard({ address }: { address?: string }) {
         base: 4,
         md: 12,
       }}
+      maxH={{
+        base: "60%",
+        md: "50%"}}
+      h="auto"
       pos="absolute"
       w="100%"
       bottom={{
         base: 0,
-        md: "auto",
+        // md: "auto",
       }}
     >
       <Button
