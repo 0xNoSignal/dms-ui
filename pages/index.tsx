@@ -40,7 +40,7 @@ const Home: NextPage = () => {
     },
     [dispatch, toast, isConnected, address]
   );
-
+console.log(website,address)
   return (
     <Box pt={6} h="100vh" w="100%" overflow={{ base: "hidden", md: "auto" }}>
       <Header />
@@ -52,9 +52,8 @@ const Home: NextPage = () => {
           md: 24,
         }}
         w="100%"
-        height={"100%"}
         flexWrap="wrap"
-        mb={{ base: 0, md: 80 }}
+        mb={{ base: 0, md: 30 }}
         px={{
           base: 0,
           md: 10,
@@ -68,6 +67,7 @@ const Home: NextPage = () => {
               onClick={start("NEW")}
               fontWeight={"normal"}
               variant={"primary"}
+              zIndex={4}
               size="lg"
               display={{
                 base: "block",
@@ -80,12 +80,13 @@ const Home: NextPage = () => {
           </>
         )}
         {website > 0 && <AppFlow />}
-      </Flex>
-      {website === 0 && (
-        <Box pos={"absolute"} right={0} bottom={0} zIndex={3}>
+        {website === 0 && (
+        <Box pos={"absolute"} opacity={0.5} left={10} bottom={20} zIndex={3}>
           <Image src={DMSImage} alt="Picture of a dead person" />
         </Box>
       )}
+      </Flex>
+  
 
       {website === 0 && address && <Dashboard address={address} />}
     </Box>

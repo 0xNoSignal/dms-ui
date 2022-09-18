@@ -15,7 +15,7 @@ export default function Intro() {
     <Box flex={1} px={{
       base: 4,
       md: 12,
-    }} mb={12}>
+    }} zIndex={4} mb={12}>
       <Heading
         fontSize={{
           base: "3xl",

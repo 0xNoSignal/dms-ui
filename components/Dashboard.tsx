@@ -104,6 +104,8 @@ export default function Dashboard({ address }: { address?: string }) {
     "0px 2px 50px rgba(0,0,0, 0.13732)",
     "0px 2px 10px rgba(255,255,255, 0.3)"
   );
+
+  console.log(boxShadow)
   return (
     <Box
       boxShadow={boxShadow}
@@ -358,14 +360,14 @@ const DashboardDetailRow = ({
 
 const Name = ({ data }: { data?: any }) => {
   if (!data) {
-    const {name} = data;
     return (
       <Td>
         <Skeleton w="100%" height="20px" />
       </Td>
     );
   }
-  return <Td overflowX={"hidden"}>{data?.name}</Td>;
+  return <Td />
+  // return <Td overflowX={"hidden"}>{data?.name}</Td>;
 };
 
 const ActionArea = ({ isYou, isDead, switchId, encryptData }: any) => {
