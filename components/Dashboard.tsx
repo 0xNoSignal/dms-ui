@@ -123,7 +123,9 @@ export default function Dashboard({ address }: { address?: string }) {
       }}
       maxH={{
         base: "60%",
-        md: "50%"}}
+        md: "30%",
+        lg: "30%",
+      }}
       h="auto"
       pos="absolute"
       w="100%"
