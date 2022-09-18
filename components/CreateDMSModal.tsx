@@ -316,7 +316,6 @@ const  notEnoughFunds = useMemo(() => {
   const { chain } = useNetwork();
 
   const initBundlr = useCallback(async () => {
-    console.log("initBundlr");
     if (window && switchNetworkAsync) {
       if (chain?.id !== 137) {
         toast(SWITCHING_NETWORK);

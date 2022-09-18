@@ -40,7 +40,6 @@ const Home: NextPage = () => {
     },
     [dispatch, toast, isConnected, address]
   );
-console.log(website,address)
   return (
     <Box pt={6} h="100vh" w="100%" overflow={{ base: "hidden", md: "auto" }}>
       <Header />
