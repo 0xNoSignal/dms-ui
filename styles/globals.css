@@ -11,6 +11,13 @@ a {
   text-decoration: none;
 }
 
+#lit-connect-modal-container{
+  z-index: 1000;
+}
+.lit-connect-modal-container{
+  z-index: 1000;
+}
+
 * {
   box-sizing: border-box;
 }
