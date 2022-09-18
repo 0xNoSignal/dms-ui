@@ -11,46 +11,35 @@ import {
   Thead,
   Tr,
   useColorModeValue,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 // @ts-ignore
-import LitJsSdk from "lit-js-sdk";
 import { BigNumber } from "ethers";
-import React, {
+import {
   useCallback,
   useContext,
   useEffect,
-  useMemo,
-  useState,
-} from "react";
+  useMemo} from "react";
 import {
   useAccount,
   useBlockNumber,
-  useContractRead,
-  useContractWrite,
-  usePrepareContractWrite,
-  useProvider,
-} from "wagmi";
-import { countdown, dataURItoBlob, secondsToDhms } from "../helpers";
+  useContractRead} from "wagmi";
 import ABI from "../helpers/ABI";
 import {
-  ASSUMED_BLOCK_TIME,
-  CHAIN,
   CHAIN_ID,
-  getContractAddress,
+  getContractAddress
 } from "../helpers/constants";
-import {
-  ERROR_FETCHING_COUNTER,
-  NOT_CONNECTED,
-  UPDATE_HEARTBEAT,
-  UPDATE_HEARTBEAT_ERROR,
-} from "../helpers/toast";
 import {
   AppContext,
   MANAGEMENT_STATUS,
   startNewDms,
-  switchToManage,
+  switchToManage
 } from "../helpers/state";
+import {
+  ERROR_FETCHING_COUNTER,
+  NOT_CONNECTED
+} from "../helpers/toast";
+import { DashboardDetailRow } from "./DashboardDetailRow";
 
 export default function Dashboard({ address }: { address?: string }) {
   const { isConnected } = useAccount();
@@ -201,14 +190,6 @@ export default function Dashboard({ address }: { address?: string }) {
   );
 }
 
-interface IFeedbackSwitch {
-  id: number;
-  onlyOwner: string;
-  fileUrl: string;
-  cadence: BigNumber;
-  blockHeartbeat: BigNumber;
-  active: boolean;
-}
 
 const WrappedDetailRow = ({
   id,
@@ -219,7 +200,7 @@ const WrappedDetailRow = ({
   account?: string;
   blockNumber?: number;
 }) => {
-  const { data, error, isLoading } = useContractRead({
+  const { data, isLoading } = useContractRead({
     addressOrName: getContractAddress(CHAIN_ID),
     contractInterface: ABI,
     functionName: "getSwitchForSwitchId",
@@ -228,7 +209,7 @@ const WrappedDetailRow = ({
   });
 
   if (isLoading) return <Skeleton w="100%" height="20px" />;
-  const { onlyOwner, fileUrl, cadence, blockHeartbeat, active } = data as any;
+  const { onlyOwner, fileUrl, cadence, blockHeartbeat } = data as any;
 
   return (
     <DashboardDetailRow
@@ -243,128 +224,8 @@ const WrappedDetailRow = ({
   );
 };
 
-interface IDashboardDetailRow {
-  id: number;
-  fileUrl: string;
-  owner: string;
-  lastHeartbeat: BigNumber;
-  cadence: BigNumber;
-  blockNumber?: number;
-  account?: string;
-}
-
-const DashboardDetailRow = ({
-  id,
-  fileUrl,
-  owner,
-  lastHeartbeat,
-  cadence,
-  blockNumber,
-  account,
-}: IDashboardDetailRow) => {
-  const [data, setData] = useState();
-
-  const provider = useProvider();
-
-  const [timestamp, setTimeStamp] = useState<Date>();
-
-  useEffect(() => {
-    const run = async () => {
-      console.log("GO fileUrl", fileUrl);
-      const downloadUrl = "https://arweave.net/" + fileUrl;
-      try {
-        const data = await fetch(downloadUrl);
-        const json = await data.json();
-        if (json.name) {
-          setData(json);
-        }
-      } catch (err) {}
-    };
-
-    if (fileUrl && fileUrl.length > 0) {
-      run();
-    }
-  }, [fileUrl]);
-
-  const isYou = useMemo(() => {
-    if (!account) return;
-    return account.toLowerCase() === owner.toLowerCase();
-  }, [account, owner]);
-
-  const isDead = useMemo(() => {
-    if (!blockNumber) return;
-    const wenDead = lastHeartbeat.add(cadence).toNumber();
-    return wenDead < blockNumber;
-  }, [lastHeartbeat, blockNumber, cadence]);
-
-  useEffect(() => {
-    if (provider) {
-      const go = async () => {
-        const date = await provider
-          .getBlock(lastHeartbeat.toNumber())
-          .then((block: any) => {
-            return new Date(block.timestamp * 1000);
-          });
-        setTimeStamp(date);
-      };
-
-      go();
-    }
-  }, [lastHeartbeat, provider]);
-
-  const timeStampeFormated = useMemo(() => {
-    if (!timestamp) return;
-    return (
-      [
-        timestamp.getMonth() + 1,
-        timestamp.getDate(),
-        timestamp.getFullYear(),
-      ].join("/") +
-      " " +
-      [timestamp.getHours(), timestamp.getMinutes()].join(":")
-    );
-  }, [timestamp]);
-
-  return (
-    <Tr>
-      <Td isNumeric>{id}</Td>
-      <Name data={data} />
-      <Td
-        display={{
-          base: "none",
-          md: "table-cell",
-        }}
-      >
-        {isYou
-          ? "you"
-          : `${owner.substring(0, 6)}...${owner.substring(owner.length - 4)}`}
-      </Td>
-      <AssumedDeadIn
-        lastHeartbeat={lastHeartbeat}
-        cadence={cadence}
-        blockNumber={blockNumber}
-        isDead={isDead}
-        id={id}
-      />
-      <Td
-        display={{
-          base: "none",
-          md: "table-cell",
-        }}
-      >
-        {timeStampeFormated}
-      </Td>
-      <ActionArea
-        encryptData={data}
-        isYou={isYou}
-        isDead={isDead}
-        switchId={id}
-      />
-    </Tr>
-  );
-};
-
-const Name = ({ data }: { data?: any }) => {
+ 
+export const Name = ({ data }: { data?: any }) => {
   if (!data) {
     return (
       <Td>
@@ -379,161 +240,4 @@ const Name = ({ data }: { data?: any }) => {
   return <Td />
 };
 
-const ActionArea = ({ isYou, isDead, switchId, encryptData }: any) => {
-  if (encryptData?.version !== "0.2.0") return <Td />;
-  if (encryptData?.version === "0.2.0" && isDead)
-    return (
-      <Td>
-        <OpenKompromat encryptData={encryptData} />
-      </Td>
-    );
 
-  if (!isYou) return <Td />;
-  if (!isDead)
-    return (
-      <Td>
-        <SendHeartBeat switchId={switchId} />
-      </Td>
-    );
-  return <Td />;
-};
-
-const OpenKompromat = ({ encryptData: meData }: any) => {
-  const litNodeClient = useMemo(() => {
-    const litNodeClient = new LitJsSdk.LitNodeClient();
-    litNodeClient.connect();
-    return litNodeClient;
-  }, []);
-
-  const download = useCallback(async () => {
-    const {
-      evmContractConditions,
-      encryptedData,
-      encryptedSymmetricKeyString,
-    } = meData;
-    const authSig = await LitJsSdk.checkAndSignAuthMessage({ chain: CHAIN });
-    const symmetricKey = await litNodeClient.getEncryptionKey({
-      evmContractConditions: evmContractConditions,
-      // Note, below we convert the encryptedSymmetricKey from a UInt8Array to a hex string.  This is because we obtained the encryptedSymmetricKey from "saveEncryptionKey" which returns a UInt8Array.  But the getEncryptionKey method expects a hex string.
-      toDecrypt: encryptedSymmetricKeyString,
-      chain: CHAIN,
-      authSig,
-    });
-
-    const decryptedString = await LitJsSdk.decryptString(
-      dataURItoBlob(encryptedData),
-      symmetricKey
-    );
-
-    const originalFormat = atob(decryptedString);
-
-    var a = document.createElement("a"); //Create <a>
-    a.href = originalFormat; //Image Base64 Goes here
-    a.download = `Image.png`; //File name Here
-    a.click(); //Downloaded file
-  }, [meData, litNodeClient]);
-
-  return (
-    <Button
-      fontWeight={"medium"}
-      variant="ghost"
-      onClick={download}
-      _hover={{ color: "brown" }}
-      size={{
-        base: "sm",
-        md: "md",
-      }}
-    >
-      🪦 Open Kompromat
-    </Button>
-  );
-};
-
-const SendHeartBeat = ({ switchId }: { switchId: number }) => {
-  const toast = useToast();
-  const { config } = usePrepareContractWrite({
-    addressOrName: getContractAddress(CHAIN_ID),
-    contractInterface: ABI,
-    functionName: "heartbeat",
-    args: [switchId],
-    chainId: CHAIN_ID,
-  });
-
-  const { writeAsync } = useContractWrite(config);
-
-  const sendHeartBeat = useCallback(() => {
-    if (!writeAsync) return;
-    writeAsync()
-      .then(() => {
-        toast(UPDATE_HEARTBEAT(switchId));
-      })
-      .catch(() => {
-        toast(UPDATE_HEARTBEAT_ERROR);
-      });
-  }, [writeAsync, toast, switchId]);
-
-  return (
-    <Button
-      fontWeight={"medium"}
-      variant="ghost"
-      onClick={sendHeartBeat}
-      _hover={{ color: "brandGreen.400" }}
-      size={{
-        base: "sm",
-        md: "md",
-      }}
-    >
-      ❤️‍🔥 Send Heartbeat
-    </Button>
-  );
-};
-
-interface IAssumedDeadIn {
-  lastHeartbeat: BigNumber;
-  cadence: BigNumber;
-  blockNumber?: number;
-  isDead?: boolean;
-  id: number;
-}
-
-const AssumedDeadIn = ({
-  lastHeartbeat,
-  cadence,
-  blockNumber,
-  isDead,
-  id
-}: IAssumedDeadIn) => {
-  const timeLeft = useMemo(() => {
-    const wenDead = lastHeartbeat.add(cadence).toNumber();
-    const blocksLeft = wenDead - (blockNumber ? blockNumber : 0);
-    const timeLeft = blocksLeft * ASSUMED_BLOCK_TIME;
-
-    return timeLeft;
-  }, [cadence, lastHeartbeat, blockNumber]);
-
-
-  const [secondsLeft, setSecondsLeft] = useState<number>(0);
-
-  useEffect(() => {
-    if (timeLeft){
-      setSecondsLeft(timeLeft);
-    }
-  },[timeLeft])
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsLeft((secondsLeft) => secondsLeft - 1);
-    }, 1000);
-    return () => clearInterval(interval);
-  },[timeLeft])
-
-
-  if (!blockNumber)
-    return (
-      <Td>
-        <Skeleton h={"20px"} />
-      </Td>
-    );
-  if (isDead || secondsLeft <= 0) return <Td>😵 Dead</Td>;
-  return <Td>{secondsToDhms(secondsLeft)}</Td>;
-};

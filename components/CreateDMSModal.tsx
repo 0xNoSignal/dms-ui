@@ -17,7 +17,7 @@ import {
   Text,
   UnorderedList,
   useColorModeValue,
-  useToast,
+  useToast
 } from "@chakra-ui/react";
 // @ts-ignore
 import { WebBundlr } from "@bundlr-network/client";
@@ -31,29 +31,26 @@ import {
   useEffect,
   useMemo,
   useRef,
-  useState,
+  useState
 } from "react";
 import {
   useAccount,
-  useContractEvent,
   useContractWrite,
   useNetwork,
   usePrepareContractWrite,
-  useProvider,
   useSwitchNetwork,
-  useWaitForTransaction,
+  useWaitForTransaction
 } from "wagmi";
 import {
-  accessControlConditions,
   blobToDataURI,
-  createEVMContractConditions,
+  createEVMContractConditions
 } from "../helpers";
 import ABI from "../helpers/ABI";
 import {
   AVG_BLOCKS_PER_DAY,
   CHAIN,
   CHAIN_ID,
-  getContractAddress,
+  getContractAddress
 } from "../helpers/constants";
 import { AppContext, reset } from "../helpers/state";
 import {
@@ -76,7 +73,7 @@ import {
   SUCCESS_TO_UPLOAD,
   SWITCHED_NETWORK,
   SWITCHING_NETWORK,
-  UPDATING_DMS,
+  UPDATING_DMS
 } from "../helpers/toast";
 import TickIcon from "./TickIcon";
 
@@ -111,7 +108,6 @@ const StepNumber = ({
   );
 };
 
-const fileTypes = ["application/json"];
 
 type UPLOAD_STAGES =
   | "UPLOADING"
@@ -449,8 +445,8 @@ const  notEnoughFunds = useMemo(() => {
               .then((res) => {
                 setIsUploading("UPLOAD_SUCCESS");
                 toast(SUCCESS_TO_UPLOAD(res));
+                console.log("res?.data.id", res?.data.id);
                 if (res?.data.id) {
-                  console.log("res?.data.id", res?.data.id);
                   setArweaveId(res.data.id);
                 }
                 setIsUploading("DEFAULT");
