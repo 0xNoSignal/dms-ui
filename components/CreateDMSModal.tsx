@@ -467,6 +467,10 @@ const  notEnoughFunds = useMemo(() => {
           .then((res) => {
             setIsUploading("UPLOAD_SUCCESS");
             toast(SUCCESS_TO_UPLOAD(res));
+            console.log("res?.data.id", res?.data.id);
+            if (res?.data.id) {
+              setArweaveId(res.data.id);
+            }
             setIsUploading("DEFAULT");
           })
           .catch((e) => {
