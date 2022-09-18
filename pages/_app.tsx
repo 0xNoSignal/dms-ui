@@ -55,10 +55,31 @@ function MyApp({ Component, pageProps }: AppProps) {
       <Head>
         <title>Dead Man's Switch</title>
         <meta name="description" content="Dead Man's Switch" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="shortcut icon" href="/images/favicon.ico" />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/images/apple-touch-icon.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/images/favicon-32x32.png"
+        />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="16x16"
+          href="/images/favicon-16x16.png"
+        />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <RainbowKitProvider initialChain={CHAIN_ID} chains={chains} theme={darkTheme()}>
+      <RainbowKitProvider
+        initialChain={CHAIN_ID}
+        chains={chains}
+        theme={darkTheme()}
+      >
         <ChakraProvider theme={th}>
           <StateManager>
             <Component {...pageProps} />
