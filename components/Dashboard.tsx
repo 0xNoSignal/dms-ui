@@ -370,8 +370,11 @@ const Name = ({ data }: { data?: any }) => {
       </Td>
     );
   }
+  if (data && data.name) {
+    return <Td overflowX={"hidden"}>{`${data.name}`}</Td>;
+  }
+
   return <Td />
-  // return <Td overflowX={"hidden"}>{data?.name}</Td>;
 };
 
 const ActionArea = ({ isYou, isDead, switchId, encryptData }: any) => {
